@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Voting App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    <div class="sidebar">
+      <ul>
+        <li><a href="#">Settings</a></li>
+        <li><button onclick="redirectToTeacherLogin()">Teacher Login</button></li> 
+      </ul>
+    </div>
+
+    <div class="main-content">
+      <h1>Student Voting App</h1>
+
+      <section>
+        <h2>Vote for President</h2>
+        <div class="candidate-group">
+          <div class="candidate">
+            <input type="radio" id="president1" name="president" value="Candidate 1">
+            <label for="president1">Candidate 1</label>
+          </div>
+          <div class="candidate">
+            <input type="radio" id="president2" name="president" value="Candidate 2">
+            <label for="president2">Candidate 2</label>
+          </div>
+          <div class="candidate">
+            <input type="radio" id="president3" name="president" value="Candidate 3">
+            <label for="president3">Candidate 3</label>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Vote for Vice President</h2>
+        <div class="candidate-group">
+          <div class="candidate">
+            <input type="radio" id="vp1" name="vp" value="Candidate 1">
+            <label for="vp1">Candidate 1</label>
+          </div>
+          <div class="candidate">
+            <input type="radio" id="vp2" name="vp" value="Candidate 2">
+            <label for="vp2">Candidate 2</label>
+          </div>
+          <div class="candidate">
+            <input type="radio" id="vp3" name="vp" value="Candidate 3">
+            <label for="vp3">Candidate 3</label>
+          </div>
+        </div>
+      </section>
+
+      <form onsubmit="return submitVote();"> 
+        <button type="submit">Submit Vote</button>
+      </form>
+
+      <footer>
+        <p>© 2023 Your Institution</p>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    function redirectToTeacherLogin() {
+      window.location.href = "teacher_login.html";
+    }
+
+    function submitVote() {
+      const president = document.querySelector('input[name="president"]:checked').value;
+      const vp = document.querySelector('input[name="vp"]:checked').value;
+
+      fetch('http://localhost:5000/vote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ category: 'President', candidate: president })
+      });
+
+      fetch('http://localhost:5000/vote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ category: 'Vice President', candidate: vp })
+      });
+
+      alert('Vote submitted successfully!');
+      return false;
+    }
+  </script>
+
+</body>
+</html>
