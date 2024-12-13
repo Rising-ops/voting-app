@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Teacher Login</title>
+  <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+
+  <div class="container"> 
+    <div class="main-content"> 
+      <h1>Teacher Login</h1>
+
+      <form id="loginForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+
+        <button type="submit">Login</button>
+      </form>
+
+      <div id="results" style="display: none;"> 
+        <h2>Results</h2>
+        <p id="presidentResults">President Results</p>
+        <p id="vicePresidentResults">Vice President Results</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById("loginForm");
+    const resultsDiv = document.getElementById("results");
+
+    loginForm.addEventListener("submit", (event) => {
+      event.preventDefault(); 
+
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      fetch('http://localhost:5000/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      })
+      .then(response => response.json())
+      .then(data => {
+        const token = data.token;
+
+        fetch('http://localhost:5000/results', {
+          headers: { Authorization: token }
+        })
+        .then(response => response.json())
+        .then(results => {
+          const presidentResults = Object.entries(results.President || {})
+            .map(([candidate, votes]) => `${candidate}: ${votes} votes`)
+            .join('<br>');
+
+          const vicePresidentResults = Object.entries(results['Vice President'] || {})
+            .map(([candidate, votes]) => `${candidate}: ${votes} votes`)
+            .join('<br>');
+
+          document.getElementById("presidentResults").innerHTML = presidentResults;
+          document.getElementById("vicePresidentResults").innerHTML = vicePresidentResults;
+
+          resultsDiv.style.display = "block";
+        });
+      })
+      .catch(() => alert("Invalid login credentials"));
+    });
+  </script>
+
+</body>
+</html>
