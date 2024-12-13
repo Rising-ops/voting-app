@@ -1,0 +1,24 @@
+http://localhost:5000(backend start)
+
+install mysql
+at cmd:
+mysql -u root -p(to verify)
+mysql>  enter password
+
+
+at mysql cml run:
+CREATE DATABASE voting_app;
+
+USE voting_app;
+
+CREATE TABLE votes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category VARCHAR(255),
+    candidate VARCHAR(255)
+);
+
+CREATE TABLE teachers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255),
+    password VARCHAR(255)
+);
